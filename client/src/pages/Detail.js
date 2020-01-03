@@ -22,25 +22,26 @@ class Detail extends Component {
         <Row>
           <Col size="md-12">
             <Jumbotron>
-              <h1>
+              <h2>
                 {this.state.book.title} by {this.state.book.author}
-              </h1>
+              </h2>
             </Jumbotron>
           </Col>
         </Row>
         <Row>
           <Col size="md-10 md-offset-1">
             <article>
-              <h1>Synopsis</h1>
+              <h3>Synopsis</h3>
               <p>
-                {this.state.book.synopsis}
+                {this.state.book.description}
               </p>
+              <a href={this.state.book.link}>Click to Here for Google Reader</a>
             </article>
           </Col>
         </Row>
         <Row>
           <Col size="md-2">
-            <Link to="/">← Back to Authors</Link>
+            <Link to="/books">← Back to My List</Link>
           </Col>
         </Row>
       </Container>

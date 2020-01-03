@@ -12,9 +12,7 @@ class Books extends Component {
     books: [],
     title: "",
     author: "",
-    description: "",
-    image: "",
-    link: ""
+    synopsis: ""
   };
 
   componentDidMount() {
@@ -24,7 +22,7 @@ class Books extends Component {
   loadBooks = () => {
     API.getBooks()
       .then(res =>
-        this.setState({ books: res.data, title: "", author: "", description: "", image: "", link: "" })
+        this.setState({ books: res.data, title: "", author: "", synopsis: "" })
       )
       .catch(err => console.log(err));
   };
