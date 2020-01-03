@@ -7,6 +7,12 @@ import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, TextArea, FormBtn } from "../components/Form";
 
+const styles = {
+  Title:{
+    fontWeight: 'bold'
+  }
+}
+
 class Books extends Component {
   state = {
     books: [],
@@ -44,41 +50,70 @@ class Books extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    if (this.state.title && this.state.author) {
-      API.saveBook({
-        title: this.state.title,
-        author: this.state.author,
-        synopsis: this.state.synopsis
-      })
-        .then(res => this.loadBooks())
-        .catch(err => console.log(err));
-    }
+    let searchItem = this.state.title;
+    fetch("https://www.googleapis.com/books/v1/volumes?q=" + searchItem)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            books: result.items
+          });
+        },
+        (error) => {
+          this.setState({
+            error
+          });
+        }
+      )
   };
 
+
   render() {
-    return (
-      <Container fluid>
-          <Col size="md-12 sm-12">
-            <Jumbotron>
-              <h1>Google Books Search</h1>
-            </Jumbotron>
-            <form>
-              <Input
-                value={this.state.title}
-                onChange={this.handleInputChange}
-                name="title"
-                placeholder="Title (required)"
-              />
-              <FormBtn
-                disabled={!(this.state.author && this.state.title)}
-                onClick={this.handleFormSubmit}
-              >
-                Search Book
-              </FormBtn>
-            </form>
-          </Col>
-      </Container>
-    );
+    const{error, books} = this.state;
+    if(error){
+      return <div>Error: {error.message}</div>;
+    } else {
+      return (
+        <Container fluid>
+          <Row>
+            <Col size="md-12 sm-12">
+              <Jumbotron>
+                <h1>Google Books Search</h1>
+              </Jumbotron>
+              <form>
+                <Input
+                  value={this.state.title}
+                  onChange={this.handleInputChange}
+                  name="title"
+                  placeholder="Title (required)"
+                />
+                <FormBtn
+                  disabled={!(this.state.title)}
+                  onClick={this.handleFormSubmit}
+                >
+                  Search Book
+                </FormBtn>
+              </form>
+            </Col>
+          </Row>
+          <Row>
+            <Col size="md-12 sm-12">
+              <ul>
+                {books.map( book => (
+                  <li className="list-group-item" key={book.volumeInfo.title}>
+                    <img src={book.volumeInfo.imageLinks.smallThumbnail}></img>
+                    <p style={{fontWeight: "bold"}}>{book.volumeInfo.title} </p>
+                    <p>By: {book.volumeInfo.authors[0]} </p>
+                    <p>{book.volumeInfo.description}</p>
+                    <a href={book.accessInfo.webReaderLink}>Web Reader</a>
+                  </li>
+                ))}
+              </ul>
+            </Col>
+          </Row>
+        </Container>
+      );
+    }
   }
 }
 
