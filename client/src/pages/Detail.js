@@ -40,6 +40,11 @@ class Detail extends Component {
           </Col>
         </Row>
         <Row>
+          <Col size="md-10 md-offset-1">
+            <img src={this.state.book.image}></img>
+          </Col>
+        </Row>
+        <Row>
           <Col size="md-2">
             <Link to="/books">← Back to My List</Link>
           </Col>
