@@ -68,14 +68,14 @@ class Books extends Component {
       )
   };
 
-  handleSaveButton = event => {
+  handleSaveButton = (event, info) => {
     event.preventDefault();
-    console.log(event.target);
-    let title = event.target.getAttribute("title");
-    let author = event.target.getAttribute("author");
-    let description = event.target.getAttribute("description");
-    let image = event.target.getAttribute("image");
-    let link = event.target.getAttribute("link");
+    // console.log(event.target);
+    // let title = event.target.getAttribute("title");
+    // let author = event.target.getAttribute("author");
+    // let description = event.target.getAttribute("description");
+    // let image = event.target.getAttribute("image");
+    // let link = event.target.getAttribute("link");
     // this.setState({
     //   title: [title],
     //   author: [author],
@@ -83,13 +83,7 @@ class Books extends Component {
     //   image: [image],
     //   link: [link]
     // })
-      API.saveBook({
-        title: title,
-        author: author,
-        description: description,
-        image: image,
-        link: link
-      })
+      API.saveBook({...info})
         .then(alert("Book Saved"))
         .catch(err => console.log(err));
   }
@@ -126,7 +120,13 @@ class Books extends Component {
           <Row>
             <Col size="md-12 sm-12">
               <ul>
-                {books.map( book => (
+                {books.map( book => {
+                  const {title, description} = book.volumeInfo;
+                  const link = book.accessInfo.webReaderLink;
+                  const author = book.volumeInfo.authors[0];
+                  const image = book.volumeInfo.imageLinks.smallThumbnail;
+
+                  return (
                   <li className="list-group-item" key={book.id} >
                     <form>
                       <img src={book.volumeInfo.imageLinks.smallThumbnail} alt='No Image'></img>
@@ -140,11 +140,12 @@ class Books extends Component {
                           description={book.volumeInfo.description}
                           image={book.volumeInfo.imageLinks.smallThumbnail}
                           link={book.accessInfo.webReaderLink}
-                          onClick={this.handleSaveButton}
+                          onClick={event => this.handleSaveButton(event, {title, description, link, author, image})}
                         > Save Book </FormBtn>
                     </form>
                   </li>
-                ))}
+                  )
+                })}
               </ul>
             </Col>
           </Row>
