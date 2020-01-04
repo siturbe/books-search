@@ -28,19 +28,6 @@ class Books extends Component {
     // this.loadBooks();
   }
 
-  // loadBooks = () => {
-  //   API.getBooks()
-  //     .then(res =>
-  //       this.setState({ books: res.data, title: "", author: "", description: "", image: "", link: "" })
-  //     )
-  //     .catch(err => console.log(err));
-  // };
-
-  // deleteBook = id => {
-  //   API.deleteBook(id)
-  //     .then(res => this.loadBooks())
-  //     .catch(err => console.log(err));
-  // };
 
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -70,19 +57,7 @@ class Books extends Component {
 
   handleSaveButton = (event, info) => {
     event.preventDefault();
-    // console.log(event.target);
-    // let title = event.target.getAttribute("title");
-    // let author = event.target.getAttribute("author");
-    // let description = event.target.getAttribute("description");
-    // let image = event.target.getAttribute("image");
-    // let link = event.target.getAttribute("link");
-    // this.setState({
-    //   title: [title],
-    //   author: [author],
-    //   description: [description],
-    //   image: [image],
-    //   link: [link]
-    // })
+
       API.saveBook({...info})
         .then(alert("Book Saved"))
         .catch(err => console.log(err));
@@ -135,11 +110,6 @@ class Books extends Component {
                       <p>{book.volumeInfo.description}</p>
                       <a href={book.accessInfo.webReaderLink}>Web Reader</a>
                         <FormBtn 
-                          title={book.volumeInfo.title}
-                          author={book.volumeInfo.authors[0]}
-                          description={book.volumeInfo.description}
-                          image={book.volumeInfo.imageLinks.smallThumbnail}
-                          link={book.accessInfo.webReaderLink}
                           onClick={event => this.handleSaveButton(event, {title, description, link, author, image})}
                         > Save Book </FormBtn>
                     </form>
